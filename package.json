@@ -1,0 +1,30 @@
+{
+  "name": "videorag-studio",
+  "version": "1.0.0",
+  "description": "An AI-powered platform that aims to transform videos into a searchable knowledge base.",
+  "homepage": "https://github.com/koushik-dasss/VideoRAG-Studio#readme",
+  "packageManager": "npm@10.2.4",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "bugs": {
+    "url": "https://github.com/koushik-dasss/VideoRAG-Studio/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koushik-dasss/VideoRAG-Studio.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start"
+  },
+  "devDependencies": {
+    "turbo": "^2.10.2"
+  }
+}
