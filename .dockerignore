@@ -1,0 +1,8 @@
+node_modules
+.turbo
+dist
+apps/backend/.eslintrc.cjs
+apps/backend/.prettierrc
+apps/frontend/.eslintrc.cjs
+apps/frontend/.prettierrc
+*.log
