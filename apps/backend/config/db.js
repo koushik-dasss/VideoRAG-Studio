@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
-// Hardcoded fallback ensures connection works even if your environment loader misbehaves
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://koushikdasmagnate2005_db_user:KoushikPass2026@cluster0.k726gfs.mongodb.net/videorag_db?appName=Cluster0";
+const MONGO_URI = process.env.MONGODB_URI || process.env.MONGO_URI;
 
 const connectDB = async () => {
   try {
