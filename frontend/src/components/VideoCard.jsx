@@ -1,7 +1,10 @@
 import { Play, Calendar, User, HardDrive } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import StatusBadge from "./StatusBadge";
 
 export default function VideoCard({ video }) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500 transition-all duration-300 hover:-translate-y-1">
 
@@ -13,7 +16,10 @@ export default function VideoCard({ video }) {
           className="w-full h-52 object-cover"
         />
 
-        <button className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition">
+        <button 
+          onClick={() => navigate(`/studio/${video.id}`)}
+          className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition"
+        >
           <div className="bg-blue-600 p-4 rounded-full">
             <Play size={28} fill="white" className="text-white ml-1" />
           </div>
@@ -56,7 +62,10 @@ export default function VideoCard({ video }) {
             {video.duration}
           </span>
 
-          <button className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition">
+          <button 
+            onClick={() => navigate(`/studio/${video.id}`)}
+            className="px-4 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition"
+          >
             View
           </button>
 

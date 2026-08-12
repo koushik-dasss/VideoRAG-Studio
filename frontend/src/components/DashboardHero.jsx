@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardHero() {
+  const navigate = useNavigate();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 25 }}
@@ -33,7 +36,7 @@ export default function DashboardHero() {
             <br />
 
             <span className="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
-              Arpan 👋
+              Creator 👋
             </span>
 
           </h1>
@@ -51,7 +54,10 @@ export default function DashboardHero() {
         {/* Right */}
         <div className="flex flex-col gap-4">
 
-          <button className="flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-8 py-4 font-semibold transition hover:bg-blue-700">
+          <button
+            onClick={() => navigate('/upload')}
+            className="flex items-center justify-center gap-3 rounded-2xl bg-blue-600 px-8 py-4 font-semibold transition hover:bg-blue-700"
+          >
 
             Upload New Video
 
@@ -59,7 +65,10 @@ export default function DashboardHero() {
 
           </button>
 
-          <button className="rounded-2xl border border-slate-700 bg-slate-900/70 px-8 py-4 font-medium transition hover:border-blue-500">
+          <button
+            onClick={() => navigate('/library')}
+            className="rounded-2xl border border-slate-700 bg-slate-900/70 px-8 py-4 font-medium transition hover:border-blue-500"
+          >
 
             View Library
 

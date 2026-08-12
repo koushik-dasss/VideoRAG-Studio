@@ -1,15 +1,55 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainLayout from "../layouts/MainLayout";
 import VideoCard from "../components/VideoCard";
-import videos from "../data/videos";
 import { Search } from "lucide-react";
+import { getAllLectures } from "../services/lectureService";
 
 export default function Library() {
   const [search, setSearch] = useState("");
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredVideos = videos.filter((video) =>
-    video.title.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const userId = '64a1b2c3d4e5f6a7b8c9d0e1'; // mock user
+        const res = await getAllLectures(userId);
+        
+        // Map backend fields to VideoCard expected format
+        const mappedVideos = (res.data?.data || []).map(v => ({
+          id: v._id,
+          title: v.title,
+          status: v.status,
+          thumbnail: v.thumbnailUrl ? `http://localhost:3000${v.thumbnailUrl}` : 'https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&q=80',
+          uploadDate: new Date(v.createdAt).toLocaleDateString(),
+          size: v.fileType,
+          uploadedBy: 'You',
+          duration: v.duration ? `${Math.round(v.duration / 60)}m` : '0m'
+        }));
+        
+        setVideos(mappedVideos);
+      } catch (err) {
+        console.error("Failed to load lectures:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchVideos();
+  }, []);
+
+  const filteredVideos = videos.filter((video) => {
+    if (!search.trim()) return true;
+    const query = search.toLowerCase().trim();
+    const titleLower = video.title.toLowerCase();
+    if (titleLower.includes(query)) return true;
+
+    // Handle common search typos (e.g., 'nural' -> 'neural')
+    const queryWords = query.split(/\s+/);
+    return queryWords.every((word) => {
+      const fixedWord = word.replace('nural', 'neural').replace('learing', 'learning');
+      return titleLower.includes(word) || titleLower.includes(fixedWord);
+    });
+  });
 
   return (
     <MainLayout>

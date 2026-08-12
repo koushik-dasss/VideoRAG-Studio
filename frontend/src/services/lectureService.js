@@ -9,8 +9,5 @@ export const getLecture = (id) =>
 export const createLecture = (data) => 
   api.post('/lectures', data);
 
-export const updateLecture = (id, data) => 
-  api.patch(`/lectures/${id}`, data);
-
-export const deleteLecture = (id) => 
-  api.delete(`/lectures/${id}`);
+export const getUserJobs = (userId) =>
+  api.get(`/lectures/jobs/${userId}`);

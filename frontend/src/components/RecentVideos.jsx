@@ -1,31 +1,15 @@
-const recentVideos = [
-  {
-    id: 1,
-    title: "AI Conference 2026",
-    duration: "15:32",
-    status: "Completed",
-  },
-  {
-    id: 2,
-    title: "Machine Learning Workshop",
-    duration: "22:18",
-    status: "Processing",
-  },
-  {
-    id: 3,
-    title: "Deep Learning Tutorial",
-    duration: "34:45",
-    status: "Completed",
-  },
-  {
-    id: 4,
-    title: "Product Demo",
-    duration: "08:10",
-    status: "Completed",
-  },
-];
+import { useNavigate } from "react-router-dom";
 
-export default function RecentVideos() {
+const formatDuration = (seconds) => {
+  if (!seconds) return '00:00';
+  const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+  const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+};
+
+export default function RecentVideos({ videos = [] }) {
+  const navigate = useNavigate();
+
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
 
@@ -35,7 +19,10 @@ export default function RecentVideos() {
           Recent Videos
         </h2>
 
-        <button className="text-blue-400 hover:text-blue-300 text-sm">
+        <button
+          onClick={() => navigate('/library')}
+          className="text-blue-400 hover:text-blue-300 text-sm"
+        >
           View All
         </button>
 
@@ -43,29 +30,39 @@ export default function RecentVideos() {
 
       <div className="space-y-4">
 
-        {recentVideos.map((video) => (
+        {videos.length === 0 && (
+          <p className="text-slate-500 text-sm py-4 text-center">No recent videos.</p>
+        )}
+
+        {videos.map((video) => (
 
           <div
-            key={video.id}
-            className="flex justify-between items-center bg-slate-900 rounded-xl p-4 hover:bg-slate-800 transition"
+            key={video._id}
+            onClick={() => navigate(`/studio/${video._id}`)}
+            className="flex justify-between items-center bg-slate-900 rounded-xl p-4 hover:bg-slate-800 transition cursor-pointer"
           >
 
-            <div>
-
-              <h3 className="text-white font-medium">
-                {video.title}
-              </h3>
-
-              <p className="text-slate-400 text-sm mt-1">
-                {video.duration}
-              </p>
+            <div className="flex items-center space-x-4">
+              {video.thumbnailUrl && (
+                <img src={video.thumbnailUrl} alt="Thumbnail" className="w-16 h-10 object-cover rounded" />
+              )}
+              <div>
+                <h3 className="text-white font-medium">
+                  {video.title}
+                </h3>
+                <p className="text-slate-400 text-sm mt-1">
+                  {formatDuration(video.duration)}
+                </p>
+              </div>
 
             </div>
 
             <span
               className={`px-3 py-1 rounded-full text-xs font-medium ${
-                video.status === "Completed"
+                video.status === "done"
                   ? "bg-green-500/20 text-green-400"
+                  : video.status === "failed" 
+                  ? "bg-red-500/20 text-red-400"
                   : "bg-yellow-500/20 text-yellow-400"
               }`}
             >

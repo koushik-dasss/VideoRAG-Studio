@@ -1,31 +1,27 @@
-const activities = [
-  {
-    id: 1,
-    action: "AI Conference 2026 uploaded",
-    time: "2 min ago",
-    color: "bg-green-500",
-  },
-  {
-    id: 2,
-    action: "Transcript generated",
-    time: "15 min ago",
-    color: "bg-blue-500",
-  },
-  {
-    id: 3,
-    action: "Chapter detection completed",
-    time: "35 min ago",
-    color: "bg-purple-500",
-  },
-  {
-    id: 4,
-    action: "Semantic indexing started",
-    time: "1 hour ago",
-    color: "bg-orange-500",
-  },
-];
+const getRelativeTime = (dateString) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now - date) / 1000);
+  
+  if (diffInSeconds < 60) return `${diffInSeconds} sec ago`;
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) return `${diffInMinutes} min ago`;
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+  const diffInDays = Math.floor(diffInHours / 24);
+  return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+};
 
-export default function ActivityFeed() {
+const getColorForStatus = (status) => {
+  switch (status) {
+    case 'success': return 'bg-green-500';
+    case 'error': return 'bg-red-500';
+    case 'warning': return 'bg-yellow-500';
+    default: return 'bg-blue-500';
+  }
+};
+
+export default function ActivityFeed({ activities = [] }) {
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
 
@@ -43,25 +39,29 @@ export default function ActivityFeed() {
 
       <div className="space-y-5">
 
+        {activities.length === 0 && (
+          <p className="text-slate-500 text-sm py-4 text-center">No recent activity.</p>
+        )}
+
         {activities.map((activity) => (
 
           <div
-            key={activity.id}
+            key={activity._id}
             className="flex items-start gap-4"
           >
 
             <div
-              className={`w-3 h-3 rounded-full mt-2 ${activity.color}`}
+              className={`w-3 h-3 rounded-full mt-2 ${getColorForStatus(activity.status)}`}
             />
 
             <div>
 
               <p className="text-white">
-                {activity.action}
+                {activity.type.replace(/_/g, ' ')}
               </p>
 
               <p className="text-slate-400 text-sm mt-1">
-                {activity.time}
+                {getRelativeTime(activity.createdAt)}
               </p>
 
             </div>

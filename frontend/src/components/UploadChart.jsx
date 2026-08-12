@@ -8,17 +8,17 @@ import {
   YAxis,
 } from "recharts";
 
-const data = [
-  { day: "Mon", uploads: 12 },
-  { day: "Tue", uploads: 18 },
-  { day: "Wed", uploads: 14 },
-  { day: "Thu", uploads: 22 },
-  { day: "Fri", uploads: 30 },
-  { day: "Sat", uploads: 24 },
-  { day: "Sun", uploads: 19 },
-];
-
-export default function UploadChart() {
+export default function UploadChart({ data = [] }) {
+  // Use provided data or fallback to zeroed data for a week
+  const chartData = data.length > 0 ? data : [
+    { day: "Mon", uploads: 0 },
+    { day: "Tue", uploads: 0 },
+    { day: "Wed", uploads: 0 },
+    { day: "Thu", uploads: 0 },
+    { day: "Fri", uploads: 0 },
+    { day: "Sat", uploads: 0 },
+    { day: "Sun", uploads: 0 },
+  ];
   return (
     <div className="bg-slate-950 border border-slate-800 rounded-2xl p-6">
 
@@ -30,7 +30,7 @@ export default function UploadChart() {
 
         <ResponsiveContainer>
 
-          <AreaChart data={data}>
+          <AreaChart data={chartData}>
 
             <defs>
 

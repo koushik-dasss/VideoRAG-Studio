@@ -1,17 +1,35 @@
 import { useState } from "react";
 import MainLayout from "../layouts/MainLayout";
 import SearchResultCard from "../components/SearchResultCard";
-import searchData from "../data/searchData";
 import { Search } from "lucide-react";
+import { semanticSearch } from "../services/searchService";
 
 export default function SemanticSearch() {
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const filteredResults = searchData.filter(
-    (item) =>
-      item.title.toLowerCase().includes(query.toLowerCase()) ||
-      item.description.toLowerCase().includes(query.toLowerCase())
-  );
+  const handleSearch = async (e) => {
+    if (e.key === 'Enter' && query.trim()) {
+      setLoading(true);
+      try {
+        const res = await semanticSearch(query);
+        const mappedResults = (res.data?.data?.results || []).map((chunk, i) => ({
+          id: chunk._id || i,
+          title: `Match in Lecture`,
+          description: chunk.text,
+          timestamp: chunk.startTime ? `${Math.floor(chunk.startTime / 60)}:${Math.floor(chunk.startTime % 60).toString().padStart(2, '0')}` : '0:00'
+        }));
+        setResults(mappedResults);
+      } catch (err) {
+        console.error("Search failed:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  const filteredResults = results;
 
   return (
     <MainLayout>
@@ -41,6 +59,7 @@ export default function SemanticSearch() {
             placeholder="Search keywords like AI, Machine Learning..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleSearch}
             className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-12 pr-4 py-4 text-white outline-none focus:border-blue-500 transition"
           />
 

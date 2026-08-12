@@ -5,28 +5,27 @@ import {
   CheckCircle2,
 } from "lucide-react";
 
-const items = [
-  {
-    icon: Cpu,
-    title: "AI Engine",
-    value: "Running",
-    color: "text-green-400",
-  },
-  {
-    icon: Database,
-    title: "Database",
-    value: "Healthy",
-    color: "text-blue-400",
-  },
-  {
-    icon: HardDrive,
-    title: "Storage",
-    value: "36% Used",
-    color: "text-cyan-400",
-  },
-];
-
-export default function SystemOverview() {
+export default function SystemOverview({ accuracy = 100, totalVideos = 0, totalStorageBytes = 0 }) {
+  const items = [
+    {
+      icon: Cpu,
+      title: "AI Engine",
+      value: "Running",
+      color: "text-green-400",
+    },
+    {
+      icon: Database,
+      title: "Database",
+      value: "Healthy",
+      color: "text-blue-400",
+    },
+    {
+      icon: HardDrive,
+      title: "Storage",
+      value: `${(totalStorageBytes / (1024 * 1024)).toFixed(1)} MB Used`,
+      color: "text-cyan-400",
+    },
+  ];
   return (
     <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-6 h-full">
 
@@ -92,7 +91,7 @@ export default function SystemOverview() {
         </p>
 
         <h1 className="text-5xl font-black mt-2">
-          98.7%
+          {accuracy.toFixed(1)}%
         </h1>
 
       </div>
