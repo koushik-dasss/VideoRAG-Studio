@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { createLogger } from '../utils/logger';
 import { getConfig } from './index';
 
@@ -37,17 +36,7 @@ export const connectDB = async (maxRetries = 2): Promise<void> => {
     }
   }
 
-  log.warn('MongoDB Atlas unreachable. Starting local in-memory MongoMemoryServer fallback...');
-  try {
-    const mongod = await MongoMemoryServer.create();
-    const uri = mongod.getUri();
-    await mongoose.connect(uri);
-    log.info(`MongoDB connected to MongoMemoryServer at ${uri}`);
-    await ensureDummyUser();
-  } catch (err: unknown) {
-    const msg = err instanceof Error ? err.message : String(err);
-    log.error(`Failed to start MongoMemoryServer: ${msg}`);
-    process.exit(1);
-  }
+  log.error('Fatal: Failed to connect to MongoDB Atlas. Ensure MONGODB_URI is correct and IP address is whitelisted.');
+  process.exit(1);
 };
 
